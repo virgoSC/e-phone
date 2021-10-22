@@ -1,0 +1,21 @@
+{
+    "name": "virgo/e-phone",
+    "license": "Apache2.0",
+    "authors": [
+        {
+            "name": "seirios",
+            "email": "237472989@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.2",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "6.*|7.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "EPhone\\": "src/EPhone"
+        }
+    }
+}
