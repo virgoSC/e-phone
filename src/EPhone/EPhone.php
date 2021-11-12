@@ -13,7 +13,7 @@ use EPhone\Http\Response\SeatStatusResponse;
 /**
  * //42_e0656
  * @method LoginResponse login()
- * @method PhoneResponse phone($activePhone, $passivePhone, $seats)
+ * @method PhoneResponse phone($activePhone, $passivePhone, $seats, $notifyUrl = '')
  * @method SeatResponse createSeat($activePhone, $name)
  * @method Response updateSeat($seatId, $activePhone)
  * @method Response deleteSeat($seatId, $activePhone)
@@ -42,6 +42,7 @@ class EPhone
      * @var Request $request
      */
     private $request;
+
     /**
      * @param array $config
      */

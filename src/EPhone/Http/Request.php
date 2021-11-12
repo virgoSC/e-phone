@@ -51,15 +51,15 @@ class Request
                     'passivePhone' => $arguments[1],
                     'ip' => $arguments[2],
                     'appid' => $this->ePhone->appid,
-                    'url' => $this->ePhone->notifyUrl
-                ],PhoneResponse::class);
+                    'url' => $arguments[3] ?? $this->ePhone->notifyUrl
+                ], PhoneResponse::class);
             case 'createSeat':
                 return $this->request([
                     'activePhone' => $arguments[0],
                     'name' => $arguments[1],
                     'appid' => $this->ePhone->appid,
                     'sig' => $this->ePhone->sig,
-                ],SeatResponse::class);
+                ], SeatResponse::class);
             case "deleteSeat":
             case "updateSeat" :
                 return $this->request([
@@ -71,7 +71,7 @@ class Request
                 return $this->request([
                     'id' => $arguments[0],
                     'appid' => $this->ePhone->appid,
-                ],SeatStatusResponse::class);
+                ], SeatStatusResponse::class);
             case 'captchaResend':
                 return $this->request([
                     'activePhone' => $arguments[0],
