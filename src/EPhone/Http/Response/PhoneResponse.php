@@ -11,7 +11,7 @@ class PhoneResponse extends Response
         parent::resolve();
 
         if (is_array($this->body)) {
-            $this->taskId = $this->body['taskId'];
+            $this->taskId = $this->body['taskId'] ?? '';
         } else {
             $this->taskId = $this->body;
         }
