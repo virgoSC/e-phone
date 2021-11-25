@@ -37,7 +37,6 @@ class EPhone
     public $notifyUrl;
 
     public $sig;
-
     /**
      * @var Request $request
      */
@@ -61,6 +60,10 @@ class EPhone
     public function bindToken(string $token)
     {
         $this->token = $token;
+    }
+
+    public function isCurl(bool $isCurl = true) {
+        $this->request->isCurl = true;
     }
 
     public function __call($name, $arguments): Response

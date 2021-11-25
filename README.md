@@ -19,6 +19,8 @@ $activePhone = '182******';
 
 $EPhone = new EPhone($config);
 
+//$EPhone->isCurl(true);
+
 $EPhone->bindToken($token);
 
 //登录

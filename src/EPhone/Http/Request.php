@@ -15,6 +15,8 @@ use GuzzleHttp\Exception\GuzzleException;
 class Request
 {
 
+    public $isCurl = true;
+
     private $ePhone;
 
     private $path;
@@ -99,35 +101,59 @@ class Request
         $this->path = $this->urlSet[$this->path];
         $response = new $Response;
 
-//        $re = file_get_contents('./1.txt');
 //        $response->setCode(200)
-//            ->setBody($re)
+//            ->setBody('{"statusCode":"00000","message":"绑定成功","data":"dcc9278b-8289-4053-83f8-ccc02fff361a_127019999$$360110ac"}')
 //            ->setHeader([])
 //            ->resolve();
 //        return $response;
 
         try {
-            $client = new Client();
-            $res = $client->request('POST', $this->ePhone->url . $this->path, [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'X-Access-Token' => $hasToken ? $this->ePhone->token : '',
-                ],
-                'json' => $param,
-                'debug' => false
-            ]);
-            $resBody = $res->getBody()->getContents();
+            if ($this->isCurl) {
+                $ch = curl_init();//初始化curl
+                curl_setopt($ch,CURLOPT_URL,$this->ePhone->url . $this->path);//抓取指定网页
+                curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
+                curl_setopt($ch, CURLOPT_POST, 1);//post提交方式
+                curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
 
-            $response->setCode($res->getStatusCode())
-                ->setBody($resBody)
-                ->setHeader($res->getHeaders())
-                ->resolve();
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                    'X-Access-Token: ' . $hasToken ? $this->ePhone->token : ''
+                ));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($param));
+                $data = curl_exec($ch);//运行curl
+                $resStatusCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+                curl_close($ch);
 
+                $response->setCode($resStatusCode)
+                    ->setBody($data)
+                    ->setHeader([])
+                    ->resolve();
+
+            } else {
+                $client = new Client();
+                $res = $client->request('POST', $this->ePhone->url . $this->path, [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'X-Access-Token' => $hasToken ? $this->ePhone->token : '',
+                    ],
+                    'json' => $param,
+                    'debug' => false
+                ]);
+                $resBody = $res->getBody()->getContents();
+
+                $response->setCode($res->getStatusCode())
+                    ->setBody($resBody)
+                    ->setHeader($res->getHeaders())
+                    ->resolve();
+
+            }
             return $response;
+
         } catch (GuzzleException $e) {
             $response->setCode('400')
                 ->setError($e->getMessage());
             return $response;
         }
     }
+
 }

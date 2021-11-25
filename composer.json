@@ -11,7 +11,8 @@
     "require": {
         "php": ">=7.2",
         "ext-json": "*",
-        "guzzlehttp/guzzle": "6.*|7.*"
+        "ext-curl": "*",
+        "guzzlehttp/guzzle": "6.*|7.*",
     },
     "autoload": {
         "psr-4": {
