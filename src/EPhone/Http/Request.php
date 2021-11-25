@@ -110,10 +110,11 @@ class Request
         try {
             if ($this->isCurl) {
                 $ch = curl_init();//初始化curl
-                curl_setopt($ch,CURLOPT_URL,$this->ePhone->url . $this->path);//抓取指定网页
+                curl_setopt($ch, CURLOPT_URL, $this->ePhone->url . $this->path);//抓取指定网页
                 curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
                 curl_setopt($ch, CURLOPT_POST, 1);//post提交方式
-                curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                     'Content-Type: application/json',
@@ -121,7 +122,10 @@ class Request
                 ));
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($param));
                 $data = curl_exec($ch);//运行curl
-                $resStatusCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+                $resStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                if (!$data) {
+                    throw new \Exception(curl_error($ch));
+                }
                 curl_close($ch);
 
                 $response->setCode($resStatusCode)
@@ -149,6 +153,13 @@ class Request
             }
             return $response;
 
+        } catch (\Exception $e) {
+            if (isset($ch)) {
+                curl_close($ch);
+            }
+            $response->setCode('500')
+                ->setError($e->getMessage());
+            return $response;
         } catch (GuzzleException $e) {
             $response->setCode('400')
                 ->setError($e->getMessage());
