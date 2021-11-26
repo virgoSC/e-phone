@@ -19,6 +19,8 @@ $activePhone = '182******';
 
 $EPhone = new EPhone($config);
 
+$EPhone->proxy('127.0.0.1','34491');
+
 //$EPhone->isCurl(true);
 
 $EPhone->bindToken($token);

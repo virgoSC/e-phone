@@ -62,8 +62,14 @@ class EPhone
         $this->token = $token;
     }
 
-    public function isCurl(bool $isCurl = true) {
+    public function isCurl(bool $isCurl = true)
+    {
         $this->request->isCurl = true;
+    }
+
+    public function proxy($proxyHost, $proxyPort)
+    {
+        $this->request->setProxy($proxyHost, $proxyPort);
     }
 
     public function __call($name, $arguments): Response

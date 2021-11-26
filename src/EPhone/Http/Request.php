@@ -17,6 +17,10 @@ class Request
 
     public $isCurl = true;
 
+    private $proxyHost;
+
+    private $proxyPort;
+
     private $ePhone;
 
     private $path;
@@ -96,6 +100,12 @@ class Request
         }
     }
 
+    public function setProxy($host, $port)
+    {
+        $this->proxyHost = $host;
+        $this->proxyPort = $port;
+    }
+
     private function request($param, $Response = Response::class, $hasToken = true): Response
     {
         $this->path = $this->urlSet[$this->path];
@@ -114,12 +124,19 @@ class Request
                 curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
                 curl_setopt($ch, CURLOPT_POST, 1);//post提交方式
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
 
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                     'Content-Type: application/json',
                     'X-Access-Token: ' . $hasToken ? $this->ePhone->token : ''
                 ));
+
+                //代理
+                if ($this->proxyPort and $this->proxyHost) {
+                    curl_setopt($ch, CURLOPT_PROXY, $this->proxyHost);
+                    curl_setopt($ch, CURLOPT_PROXYPORT, $this->proxyPort);
+                }
+
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($param));
                 $data = curl_exec($ch);//运行curl
                 $resStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
