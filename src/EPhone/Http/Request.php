@@ -139,6 +139,7 @@ class Request
 
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($param));
                 $data = curl_exec($ch);//运行curl
+
                 $resStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 if (!$data) {
                     throw new \Exception(curl_error($ch));

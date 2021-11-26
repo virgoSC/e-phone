@@ -21,8 +21,12 @@ class Response
     {
         if ($this->code !== '200') {
             $this->setError($this->body);
+            if (json_decode($this->body) and $this->code == '500') {
+                $this->code = '400';
+            }
         } else {
             if (json_decode($this->body)) {
+
                 $this->body = json_decode($this->body, true);
 
                 if (isset($this->body['success']) and $this->body['success'] == false) {
