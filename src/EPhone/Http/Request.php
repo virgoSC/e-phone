@@ -120,15 +120,19 @@ class Request
         try {
             if ($this->isCurl) {
                 $ch = curl_init();//初始化curl
-                curl_setopt($ch, CURLOPT_URL, $this->ePhone->url . $this->path);//抓取指定网页
+                var_dump($this->ePhone->url . $this->path);
+                curl_setopt($ch, CURLOPT_URL, $this->ePhone->url . $this->path);
                 curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
-                curl_setopt($ch, CURLOPT_POST, 1);//post提交方式
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");//post提交方式
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 3); //超时
+                curl_setopt($ch, CURLOPT_ENCODING, 1);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+                curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                     'Content-Type: application/json',
-                    'X-Access-Token: ' . $hasToken ? $this->ePhone->token : ''
+                    'X-Access-Token: ' . ($hasToken ? $this->ePhone->token : '')
                 ));
 
                 //代理
@@ -137,7 +141,7 @@ class Request
                     curl_setopt($ch, CURLOPT_PROXYPORT, $this->proxyPort);
                 }
 
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($param));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($param,JSON_UNESCAPED_UNICODE));
                 $data = curl_exec($ch);//运行curl
 
                 $resStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
