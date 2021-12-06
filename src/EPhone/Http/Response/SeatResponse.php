@@ -9,7 +9,9 @@ class SeatResponse extends Response
     public function resolve()
     {
         parent::resolve();
-        $this->seatNo = $this->body;
+        if (!is_array($this->body)) {
+            $this->seatNo = $this->body;
+        }
     }
 
     /**

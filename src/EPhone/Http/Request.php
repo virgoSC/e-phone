@@ -112,7 +112,7 @@ class Request
         $response = new $Response;
 
 //        $response->setCode(200)
-//            ->setBody('{"statusCode":"00000","message":"绑定成功","data":"dcc9278b-8289-4053-83f8-ccc02fff361a_127019999$$360110ac"}')
+//            ->setBody('{"statusCode":"50006","message":"坐席已满","data":null}')
 //            ->setHeader([])
 //            ->resolve();
 //        return $response;
