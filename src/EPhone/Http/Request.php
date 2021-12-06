@@ -120,7 +120,6 @@ class Request
         try {
             if ($this->isCurl) {
                 $ch = curl_init();//初始化curl
-                var_dump($this->ePhone->url . $this->path);
                 curl_setopt($ch, CURLOPT_URL, $this->ePhone->url . $this->path);
                 curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");//post提交方式

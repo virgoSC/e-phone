@@ -64,7 +64,7 @@ class EPhone
 
     public function isCurl(bool $isCurl = true)
     {
-        $this->request->isCurl = true;
+        $this->request->isCurl = $isCurl;
     }
 
     public function proxy($proxyHost, $proxyPort)
