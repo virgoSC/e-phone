@@ -67,6 +67,11 @@ class EPhone
         $this->request->isCurl = $isCurl;
     }
 
+    public function setTimeout(int $timeout = 120)
+    {
+        $this->request->timeout = $timeout;
+    }
+
     public function proxy($proxyHost, $proxyPort)
     {
         $this->request->setProxy($proxyHost, $proxyPort);

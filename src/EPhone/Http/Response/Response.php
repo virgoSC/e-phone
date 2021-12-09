@@ -114,11 +114,14 @@ class Response
     /**
      * @param mixed $error
      */
-    public function setError($error): self
+    public function setError($error, $timeout = '0'): self
     {
         $this->error = $error;
         if ($this->code == '200') {
             $this->code = '500';
+        }
+        if (preg_match('/.*timed out.*/', $this->error)) {
+            $this->error = "链接访问超时，请重试($timeout)";
         }
         return $this;
     }

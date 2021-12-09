@@ -17,6 +17,8 @@ class Request
 
     public $isCurl = true;
 
+    public $timeout = 120;
+
     private $proxyHost;
 
     private $proxyPort;
@@ -124,7 +126,8 @@ class Request
                 curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");//post提交方式
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 3); //超时
+                curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout); //超时
+//                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, 10); //超时
                 curl_setopt($ch, CURLOPT_ENCODING, 1);
                 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
                 curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
@@ -140,7 +143,7 @@ class Request
                     curl_setopt($ch, CURLOPT_PROXYPORT, $this->proxyPort);
                 }
 
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($param,JSON_UNESCAPED_UNICODE));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($param, JSON_UNESCAPED_UNICODE));
                 $data = curl_exec($ch);//运行curl
 
                 $resStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -179,11 +182,11 @@ class Request
                 curl_close($ch);
             }
             $response->setCode('500')
-                ->setError($e->getMessage());
+                ->setError($e->getMessage(), $this->timeout);
             return $response;
         } catch (GuzzleException $e) {
             $response->setCode('400')
-                ->setError($e->getMessage());
+                ->setError($e->getMessage(), $this->timeout);
             return $response;
         }
     }
