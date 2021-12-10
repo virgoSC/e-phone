@@ -121,7 +121,7 @@ class Response
             $this->code = '500';
         }
         if (preg_match('/.*timed out.*/', $this->error)) {
-            $this->error = "链接访问超时，请重试($timeout)";
+            $this->error = "系统异常，请稍后重试($timeout)";
         }
         return $this;
     }
