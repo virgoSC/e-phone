@@ -17,7 +17,7 @@ class Request
 
     public $isCurl = true;
 
-    public $timeout = 120;
+    public $timeout = 5;
 
     private $proxyHost;
 
